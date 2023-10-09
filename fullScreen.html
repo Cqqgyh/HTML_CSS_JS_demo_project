@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>fullScreen</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+        }
+      .page-container {
+        position: relative;
+        background-color: skyblue;
+        height: 100vh;
+        overflow: hidden;
+      }
+      .page {
+        height: 30vh;
+        display: flex;
+        color: #fff;
+        flex-direction: column;
+        align-items: center;
+        position: relative;
+        overflow: hidden;
+      }
+      .page-space {
+        height: 70vh;
+      }
+      .page-title {
+        position: relative;
+      }
+      h1 {
+          margin: 20px 0;
+          font-size: 40px;
+      }
+      h3 {
+          font-size: 30px;
+      }
+    </style>
+</head>
+<body>
+<div class="page-container" id="page-container">
+    <div class="page">
+        <div class="page-title">
+            <h1>第一屏标题</h1>
+            <h3>第一屏内容</h3>
+        </div>
+    </div>
+    <div class="page-space"></div>
+    <div class="page">
+        <div class="page-title">
+            <h1>第二屏标题</h1>
+            <h3>第二屏内容</h3>
+        </div>
+    </div>
+    <div class="page-space"></div>
+    <div class="page">
+        <div class="page-title">
+            <h1>第三屏标题</h1>
+            <h3>第三屏内容</h3>
+        </div>
+    </div>
+    <div class="page-space"></div>
+</div>
+
+<script>
+//  页面挂载后
+window.onload = () =>{
+  // 加载cdn资源 https://cdn.bootcdn.net/ajax/libs/gsap/3.12.2/CSSRulePlugin.min.js
+    const script = document.createElement('script')
+    script.src = 'https://cdn.bootcdn.net/ajax/libs/gsap/3.12.2/gsap.min.js'
+    document.body.appendChild(script)
+    script.onload = () => {
+      // 加载完成后执行
+      // 滚动事件
+      (document.getElementById('page-container') || document.body).addEventListener('wheel', (e) => {
+        // 页面可视高度
+        const innerHeight = window.innerHeight
+        // 判断e.deltaY大于0 页面向下滑动 位置坐标向上走
+        // y轴移动距离 clamp(最小值, 最大值, 阈值在前两个值之间的值)
+        let translateY = gsap.utils.clamp(
+          -2 * window.innerHeight,
+          0,
+          +gsap.getProperty('.page', 'y') +
+          (-e.deltaY / Math.abs(e.deltaY)) * innerHeight,
+        )
+        // 更新页面位置
+        gsap.to('.page', {
+          y: translateY,
+          duration: 0.5,
+        })
+
+      })
+    }
+}
+</script>
+
+</body>
+</html>
